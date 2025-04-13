@@ -25,7 +25,7 @@ Designed for fast-moving markets and clean directional setups.
 
 Measures price change intensity over a fixed lookback window `n`:
 
-Speed_t = |Price_t - Price_{t-n}| / n
+Speedₜ = |Priceₜ - Priceₜ₋ₙ| / n
 
 - Detects impulsive price moves
 - Filters out sideways/ranging behavior
@@ -38,14 +38,14 @@ Fits a line to recent prices using least squares regression to find slope `m`:
 
 #### Slope Formula:
 
-m = (W * Σ(i * P_i) - Σi * ΣP_i) / (W * Σ(i²) - (Σi)²)
+m = [W * Σ(i × Pᵢ) - Σi × ΣPᵢ] / [W * Σ(i²) - (Σi)²]
 
 Where:
 - `W` is the window length
 - `i` is the index (1, 2, ..., W)
-- `P_i` is the price at index `i`
-
-A positive slope indicates uptrend, negative slope indicates downtrend.
+- `Pᵢ` is the price at index `i`
+A positive slope → uptrend
+A negative slope → downtrend
 
 ---
 
@@ -55,17 +55,19 @@ A recursive estimator that smooths price series by balancing model trust and mar
 
 #### Prediction:
 
-x̂_k^- = x̂_{k-1} P_k^- = P_{k-1} + Q
+x̂x̂ₖ⁻ = x̂ₖ₋₁
+Pₖ⁻ = Pₖ₋₁ + Q
 
 #### Update:
 
-K_k = P_k^- / (P_k^- + R) x̂_k = x̂_k^- + K_k * (z_k - x̂_k^-) P_k = (1 - K_k) * P_k^-
-
+Kₖ   = Pₖ⁻ / (Pₖ⁻ + R)
+x̂ₖ  = x̂ₖ⁻ + Kₖ × (zₖ - x̂ₖ⁻)
+Pₖ  = (1 - Kₖ) × Pₖ⁻
 
 Where:
-- `x̂_k` = Estimated state (filtered price)
-- `z_k` = Observed price
-- `K_k` = Kalman gain
+- `x̂ₖ ` = Estimated state (filtered price)
+- `zₖ ` = Observed price
+- `Kₖ ` = Kalman gain
 - `Q` = Process noise (model trust)
 - `R` = Measurement noise (price trust)
 
